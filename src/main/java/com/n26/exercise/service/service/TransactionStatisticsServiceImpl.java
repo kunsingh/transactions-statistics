@@ -19,7 +19,7 @@ public class TransactionStatisticsServiceImpl implements TransactionsStatisticsS
 
     public TransactionStatisticsServiceImpl(){
         transactions = new PriorityQueue<>();
-        statistics = new Statistics(0l,0.0d , 0.0d, Double.MAX_VALUE, Double.MIN_VALUE);
+        statistics = new Statistics();
     }
 
 
@@ -85,7 +85,6 @@ public class TransactionStatisticsServiceImpl implements TransactionsStatisticsS
         while (transaction != null && isTransactionExpired(transaction)) {
             lock.lock();
             try {
-                // we need to re-peek in case of being already removed just before acquiring the lock.
                 transaction = transactions.peek();
                 if (isTransactionExpired(transaction)) {
                     removeTransactionFromStatistics(transactions.poll());
